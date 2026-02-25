@@ -1,5 +1,9 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:riverpod3_2026/features/products/presentation/models/product_ui_item.dart';
 
+part 'product_dto.g.dart';
+
+@JsonSerializable()
 class ProductDto {
   final int? id;
   final String? title;
@@ -13,14 +17,10 @@ class ProductDto {
     required this.thumbnail,
   });
 
-  factory ProductDto.fromJson(Map<String, dynamic> json) {
-    return ProductDto(
-      id: json['id'] as int?,
-      title: json['title'] as String?,
-      description: json['description'] as String?,
-      thumbnail: json['thumbnail'] as String?,
-    );
-  }
+  factory ProductDto.fromJson(Map<String, dynamic> json) =>
+      _$ProductDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ProductDtoToJson(this);
 }
 
 extension ProductDtoX on ProductDto {

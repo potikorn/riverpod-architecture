@@ -6,6 +6,7 @@ This project follows a **Feature-First** architecture with a focus on a **Lean W
 - **State Management & DI**: [Riverpod](https://riverpod.dev/) (with code generation)
 - **Routing**: [go_router](https://pub.dev/packages/go_router)
 - **Networking**: [dio](https://pub.dev/packages/dio)
+- **JSON Serialization**: [json_serializable](https://pub.dev/packages/json_serializable) & [json_annotation](https://pub.dev/packages/json_annotation)
 - **Local Storage**: [shared_preferences](https://pub.dev/packages/shared_preferences)
 - **Localization**: [slang](https://pub.dev/packages/slang)
 
@@ -42,10 +43,31 @@ lib/
 We focus on pragmatism. Do not over-engineer.
 
 ### 1. The Data & Domain Layer (Repositories & Use Cases)
+- **JSON Serialization**: Always use `@JsonSerializable()` for your DTOs to generate `fromJson` and `toJson` methods automatically. This prevents manual mapping errors.
 - **Default to Simple (No Use Cases)**: For straightforward CRUD operations or direct API fetches, Controllers (Notifiers) should interact with Repositories directly. Skip creating Use Cases to avoid unnecessary boilerplate.
 - **When to add Use Cases**: If a specific user action involves **highly complex business logic**, orchestrates calls between multiple repositories, or requires heavy data transformation before hitting the UI, you may introduce a `domain/usecases/` folder inside the feature.
 - **Merge Interface & Implementation**: To reduce file hopping, place the `abstract class Repository`, the `RepositoryImpl`, and its `@riverpod` provider in the **same file**.
 - **DTOs vs Domain Models**: If the API response exactly matches what the UI needs, use the DTO directly. Only map DTOs to Domain models if the API structure is messy and UI needs a clean format.
+
+**Example** (`product_dto.dart`):
+```dart
+import 'package:json_annotation/json_annotation.dart';
+
+part 'product_dto.g.dart';
+
+@JsonSerializable()
+class ProductDto {
+  final int? id;
+  final String? title;
+
+  ProductDto({this.id, this.title});
+
+  factory ProductDto.fromJson(Map<String, dynamic> json) =>
+      _$ProductDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ProductDtoToJson(this);
+}
+```
 
 **Example** (`product_repository.dart`):
 ```dart
@@ -111,7 +133,7 @@ Widget build(BuildContext context, WidgetRef ref) {
 - Inject Riverpod's `ref` into the Router provider if you need to listen to auth state changes to redirect the user (e.g., kicking to login screen if token expires).
 
 ### 4. Code Generation Commands
-Since we rely heavily on code generation (Riverpod, Slang), always run:
+Since we rely heavily on code generation (Riverpod, Slang, json_serializable), always run:
 
 ```bash
 # Generate once
