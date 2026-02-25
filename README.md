@@ -149,3 +149,20 @@ dart run build_runner watch -d
 3. *(Optional)* Add `domain/usecases/` **only if** the feature contains complex business logic that orchestrates multiple repositories.
 4. Add `presentation/`. Create your `screens/` and `controllers/`.
 5. Register the new screen in `core/router/app_router_provider.dart`.
+
+### 6. Running Different Environments (Flavors)
+This project uses native flavors (`dev`, `prod`) combined with different entry points (`main_dev.dart`, `main.dart`) to manage environment-specific configurations (like API Base URLs and App IDs).
+
+**Command Line**
+To run the app via terminal, specify both the target file (`-t`) and the flavor (`--flavor`):
+
+```bash
+# Run Development Environment (Debug Mode)
+flutter run --flavor dev -t lib/main_dev.dart
+
+# Run Production Environment (Release Mode)
+flutter run --flavor prod -t lib/main.dart --release
+```
+
+**VS Code**
+If you are using VS Code, you can use the predefined launch configurations in the "Run and Debug" panel (or `.vscode/launch.json`). This allows you to launch `Development` or `Production` with a single click.
