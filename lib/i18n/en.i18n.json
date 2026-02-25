@@ -1,0 +1,15 @@
+{
+    "hello": "Hello $name",
+    "save": "Save",
+    "login": {
+        "username": "Username",
+        "password": "Password",
+        "login_button": "Login",
+        "success": "Logged in successfully",
+        "fail": "Logged in failed",
+        "password_min_length": "Password must be at least 6 characters"
+    },
+    "common": {
+        "required_field": "$field is required"
+    }
+}
